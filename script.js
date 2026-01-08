@@ -278,22 +278,45 @@ async function loadGitHubProfile() {
     const loadingElement = document.getElementById('githubLoading');
     const profileElement = document.getElementById('githubProfileHeader');
     
-    // Set placeholder values while loading and show profile immediately
+    // Get all elements
     const reposElement = document.getElementById('githubRepos');
     const followersElement = document.getElementById('githubFollowers');
     const followingElement = document.getElementById('githubFollowing');
     const nameElement = document.getElementById('githubName');
     const usernameElement = document.getElementById('githubUsername');
     const bioElement = document.getElementById('githubBio');
+    const avatar = document.getElementById('githubAvatar');
+    const locationElement = document.getElementById('githubLocation');
+    const locationText = document.getElementById('githubLocationText');
+    const profileLink = document.getElementById('githubProfileLink');
     
-    if (reposElement) reposElement.textContent = '- - -';
-    if (followersElement) followersElement.textContent = '- - -';
-    if (followingElement) followingElement.textContent = '- - -';
-    if (nameElement) nameElement.textContent = '- - -';
-    if (usernameElement) usernameElement.textContent = '- - -';
-    if (bioElement) bioElement.textContent = '- - -';
+    // Set default values immediately and show profile
+    if (avatar) {
+        avatar.src = `https://avatars.githubusercontent.com/u/251390543?v=4`;
+        avatar.alt = 'Basirul Akhlak Borno';
+    }
     
-    // Show profile with placeholders immediately, hide loading
+    if (nameElement) nameElement.textContent = 'Basirul Akhlak Borno';
+    if (usernameElement) usernameElement.textContent = `@${username}`;
+    if (bioElement) {
+        bioElement.textContent = '"Believe in yourself, listen to your gut, and do what you love."';
+        bioElement.style.display = 'block';
+    }
+    
+    if (reposElement) reposElement.textContent = '5';
+    if (followersElement) followersElement.textContent = '2';
+    if (followingElement) followingElement.textContent = '0';
+    
+    if (locationElement && locationText) {
+        locationText.textContent = 'Jamalpur, Bangladesh';
+        locationElement.style.display = 'flex';
+    }
+    
+    if (profileLink) {
+        profileLink.href = `https://github.com/${username}`;
+    }
+    
+    // Show profile immediately, hide loading
     if (loadingElement) {
         loadingElement.style.display = 'none';
     }
@@ -310,7 +333,6 @@ async function loadGitHubProfile() {
         const data = await response.json();
         
         // Update avatar
-        const avatar = document.getElementById('githubAvatar');
         if (avatar) {
             avatar.src = data.avatar_url || `https://github.com/identicons/${username}.png`;
             avatar.alt = data.name || username;
@@ -351,8 +373,6 @@ async function loadGitHubProfile() {
         }
         
         // Update location
-        const locationElement = document.getElementById('githubLocation');
-        const locationText = document.getElementById('githubLocationText');
         if (locationElement && locationText) {
             if (data.location) {
                 locationText.textContent = data.location;
@@ -378,7 +398,6 @@ async function loadGitHubProfile() {
         }
         
         // Update profile link
-        const profileLink = document.getElementById('githubProfileLink');
         if (profileLink) {
             profileLink.href = data.html_url || `https://github.com/${username}`;
         }
@@ -388,16 +407,8 @@ async function loadGitHubProfile() {
         
     } catch (error) {
         console.error('Error loading GitHub profile:', error);
-        // Keep placeholders visible on error
-        if (reposElement) reposElement.textContent = '- - -';
-        if (followersElement) followersElement.textContent = '- - -';
-        if (followingElement) followingElement.textContent = '- - -';
-        if (nameElement) nameElement.textContent = '- - -';
-        if (usernameElement) usernameElement.textContent = '- - -';
-        if (bioElement) {
-            bioElement.textContent = 'Unable to load profile';
-            bioElement.style.display = 'block';
-        }
+        // Keep default values visible on error (profile already shown with defaults)
+        // No need to change anything, defaults are already displayed
     }
 }
 
@@ -698,100 +709,186 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// GitHub Projects API Integration
-async function loadGitHubProjects() {
-    const username = 'basirulakhlakborno';
-    const apiUrl = `https://api.github.com/users/${username}/repos?sort=updated&per_page=100`;
-    
+// Manual Projects - Projects not on GitHub or to be featured prominently
+const manualProjects = [
+    {
+        name: 'Bazaar E-Commerce',
+        description: 'A modern e-commerce platform with featured products, categories, promotional banners, and discount offers. Clean and minimalist design with orange and black accents. Built with modern web technologies.',
+        url: 'https://basirulakhlak.tech/bazaar-ecommerce/',
+        image: 'assets/ebazar.jpg',
+        languages: {
+            'JavaScript': 40,
+            'HTML': 30,
+            'CSS': 20,
+            'TypeScript': 10
+        },
+        primaryLanguage: 'JavaScript'
+    },
+    {
+        name: 'E-Commerce Platform',
+        description: 'A full-featured e-commerce platform with product listings, categories, flash sales, shopping cart, and user authentication. Built with modern web technologies and deployed on Cloudflare Workers.',
+        url: 'https://ecom.basirulakhlak.workers.dev/',
+        image: 'assets/ecom.jpg',
+        languages: {
+            'JavaScript': 40,
+            'HTML': 30,
+            'CSS': 20,
+            'TypeScript': 10
+        },
+        primaryLanguage: 'JavaScript'
+    }
+];
+
+// Create manual project card
+function createManualProjectCard(project) {
+    try {
+        const card = document.createElement('div');
+        card.className = 'skill-card';
+        
+        const primaryIconClass = getLanguageIcon(project.primaryLanguage || 'JavaScript');
+        
+        // Build language tags
+        const sortedLanguages = Object.entries(project.languages || {})
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5);
+        
+        const languageTags = sortedLanguages
+            .map(([lang]) => {
+                const iconClass = getLanguageIcon(lang);
+                return `
+                    <span class="skill-tag">
+                        <i class="${iconClass}"></i>
+                        ${lang}
+                    </span>
+                `;
+            }).join('');
+        
+        const projectName = (project.name || 'Project').toUpperCase();
+        const description = project.description || 'No description available.';
+        const truncatedDescription = description.length > 100 
+            ? description.substring(0, 100) + '...' 
+            : description;
+        
+        // Use image if provided, otherwise use icon
+        const iconWrapper = project.image 
+            ? `<div class="skill-icon-wrapper project-image-wrapper">
+                <img src="${project.image}" alt="${projectName}" class="project-image">
+               </div>`
+            : `<div class="skill-icon-wrapper">
+                <i class="${primaryIconClass} colored"></i>
+               </div>`;
+        
+        card.innerHTML = `
+            ${iconWrapper}
+            <h3>${projectName}</h3>
+            <p class="project-description">${truncatedDescription}</p>
+            <div class="skill-list">
+                ${languageTags}
+            </div>
+        `;
+        
+        // Make card clickable
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => {
+            if (project.url) {
+                window.open(project.url, '_blank');
+            }
+        });
+        
+        return card;
+    } catch (error) {
+        console.error('Error creating manual project card:', error, project);
+        // Return a basic card even if there's an error
+        const card = document.createElement('div');
+        card.className = 'skill-card';
+        card.innerHTML = `
+            <div class="skill-icon-wrapper">
+                <i class="devicon-javascript-plain colored"></i>
+            </div>
+            <h3>${(project.name || 'Project').toUpperCase()}</h3>
+            <p class="project-description">${project.description || 'No description available.'}</p>
+        `;
+        if (project.url) {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', () => {
+                window.open(project.url, '_blank');
+            });
+        }
+        return card;
+    }
+}
+
+// Load Projects (Hardcoded)
+function loadGitHubProjects() {
     const projectsGrid = document.getElementById('projectsGrid');
     const projectsLoading = document.getElementById('projectsLoading');
     
     if (!projectsGrid) return;
     
-    try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-            throw new Error('Failed to fetch GitHub repositories');
-        }
-        
-        const repos = await response.json();
-        
-        // Filter out forks, archived, portfolio repo, and repos with no meaningful code
-        const filteredRepos = repos
-            .filter(repo => {
-                // Exclude forks and archived repos
-                if (repo.fork || repo.archived) return false;
+    // Hide loading and clear grid first
+    if (projectsLoading) {
+        projectsLoading.style.display = 'none';
+    }
+    projectsGrid.innerHTML = '';
+    
+    // Add manual projects
+    if (manualProjects && manualProjects.length > 0) {
+        manualProjects.forEach((project, index) => {
+            try {
+                const card = createManualProjectCard(project);
+                if (card) {
+                    projectsGrid.appendChild(card);
+                    // Apply fade-in animation
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(30px)';
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100 + (index * 50));
+                }
+            } catch (error) {
+                console.error('Error creating manual project card:', error, project);
+                // Create a fallback card
+                const fallbackCard = document.createElement('div');
+                fallbackCard.className = 'skill-card';
+                const fallbackIcon = project.image 
+                    ? `<div class="skill-icon-wrapper project-image-wrapper">
+                        <img src="${project.image}" alt="${(project.name || 'Project').toUpperCase()}" class="project-image">
+                       </div>`
+                    : `<div class="skill-icon-wrapper">
+                        <i class="devicon-javascript-plain colored"></i>
+                       </div>`;
+                fallbackCard.innerHTML = `
+                    ${fallbackIcon}
+                    <h3>${(project.name || 'Project').toUpperCase()}</h3>
+                    <p class="project-description">${project.description || 'No description available.'}</p>
+                    <div class="skill-list">
+                        <span class="skill-tag"><i class="devicon-javascript-plain"></i> JavaScript</span>
+                        <span class="skill-tag"><i class="devicon-html5-plain"></i> HTML</span>
+                        <span class="skill-tag"><i class="devicon-css3-plain"></i> CSS</span>
+                    </div>
+                `;
+                if (project.url) {
+                    fallbackCard.style.cursor = 'pointer';
+                    fallbackCard.addEventListener('click', () => {
+                        window.open(project.url, '_blank');
+                    });
+                }
+                projectsGrid.appendChild(fallbackCard);
+                fallbackCard.style.opacity = '0';
+                fallbackCard.style.transform = 'translateY(30px)';
+                fallbackCard.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
                 
-                // Exclude the portfolio repository itself
-                if (repo.name === 'basirulakhlakborno.github.io' || 
-                    repo.name === `${username}.github.io`) return false;
-                
-                // Exclude repos that are likely just README/documentation
-                const nameLower = repo.name.toLowerCase();
-                if (nameLower.includes('readme') || 
-                    nameLower === 'readme') return false;
-                
-                return true;
-            })
-            .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
-        
-        if (filteredRepos.length === 0) {
-            projectsGrid.innerHTML = '<p style="text-align: center; color: var(--text-gray); padding: 3rem;">No projects found.</p>';
-            return;
-        }
-        
-        // Hide loading
-        if (projectsLoading) {
-            projectsLoading.style.display = 'none';
-        }
-        
-        // Clear loading element
-        projectsGrid.innerHTML = '';
-        
-        // Fetch languages for each repo and create project cards
-        const projectPromises = filteredRepos.map(async (repo) => {
-            const languages = await fetchRepoLanguages(username, repo.name);
-            
-            // Filter out repos that only have HTML/CSS/Markdown (web pages)
-            const codeLanguages = Object.keys(languages).filter(lang => {
-                const langLower = lang.toLowerCase();
-                return !['html', 'css', 'markdown', 'scss', 'sass', 'less'].includes(langLower);
-            });
-            
-            // Skip repos with no actual code languages (only web/documentation)
-            if (codeLanguages.length === 0 && Object.keys(languages).length > 0) {
-                return null;
+                setTimeout(() => {
+                    fallbackCard.style.opacity = '1';
+                    fallbackCard.style.transform = 'translateY(0)';
+                }, 100 + (index * 50));
             }
-            
-            return createProjectCard(repo, languages);
         });
-        
-        const projectCards = (await Promise.all(projectPromises)).filter(card => card !== null);
-        projectCards.forEach(card => {
-            projectsGrid.appendChild(card);
-        });
-        
-        // Apply fade-in animation to new cards
-        projectCards.forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            
-            setTimeout(() => {
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, 100);
-        });
-        
-    } catch (error) {
-        console.error('Error loading GitHub projects:', error);
-        if (projectsLoading) {
-            projectsLoading.innerHTML = `
-                <p style="text-align: center; color: var(--text-gray); padding: 3rem;">
-                    Failed to load projects. Please try again later.
-                </p>
-            `;
-        }
+    } else {
+        projectsGrid.innerHTML = '<p style="text-align: center; color: var(--text-gray); padding: 3rem;">No projects found.</p>';
     }
 }
 
