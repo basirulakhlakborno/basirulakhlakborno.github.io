@@ -712,15 +712,54 @@ document.head.appendChild(style);
 // Manual Projects - Projects not on GitHub or to be featured prominently
 const manualProjects = [
     {
+        name: 'OGFLIX - Movie & TV Streaming',
+        description: 'A modern streaming platform featuring popular movies and TV shows with a clean, dark-themed interface. Includes search functionality, sidebar navigation, and horizontal scrollable content sections. Built with React and TypeScript for type-safe, component-based development.',
+        url: 'https://ogflix.tr/',
+        image: 'assets/photo_2026-01-10_21-25-02.jpg',
+        languages: {
+            'TypeScript': 45,
+            'React': 35,
+            'CSS': 15,
+            'HTML': 5
+        },
+        primaryLanguage: 'TypeScript'
+    },
+    {
+        name: 'ANIMEWORLD - Anime & Cartoon Streaming',
+        description: 'A modern anime and cartoon streaming platform featuring character showcases, newest drops section, and comprehensive content library. Dark-themed UI with prominent character icons for popular series like Doraemon, Beyblade, Transformers, Shinchan, and Dragon Ball. Built with Vite for fast development and optimized performance.',
+        url: 'https://sa.anizen.tr/',
+        image: 'assets/photo_2026-01-10_21-20-19.jpg',
+        languages: {
+            'JavaScript': 50,
+            'Vite': 30,
+            'HTML': 15,
+            'CSS': 5
+        },
+        primaryLanguage: 'JavaScript'
+    },
+    {
+        name: 'ANIZEN - Anime Streaming',
+        description: 'A dark-themed anime streaming platform featuring spotlight sections, trending anime carousels, and comprehensive anime database. Includes search functionality, community features, and watch2gether capabilities. Modern UI with dark blue-grey theme and green accents.',
+        url: 'https://anizen.tr/home',
+        image: 'assets/photo_2026-01-10_21-20-06.jpg',
+        languages: {
+            'JavaScript': 40,
+            'PHP': 30,
+            'HTML': 20,
+            'CSS': 10
+        },
+        primaryLanguage: 'JavaScript'
+    },
+    {
         name: 'Bazaar E-Commerce',
         description: 'A modern e-commerce platform with featured products, categories, promotional banners, and discount offers. Clean and minimalist design with orange and black accents. Built with modern web technologies.',
         url: 'https://basirulakhlak.tech/bazaar-ecommerce/',
         image: 'assets/ebazar.jpg',
         languages: {
             'JavaScript': 40,
-            'HTML': 30,
-            'CSS': 20,
-            'TypeScript': 10
+            'PHP': 30,
+            'HTML': 20,
+            'CSS': 10
         },
         primaryLanguage: 'JavaScript'
     },
@@ -731,9 +770,9 @@ const manualProjects = [
         image: 'assets/ecom.jpg',
         languages: {
             'JavaScript': 40,
-            'HTML': 30,
-            'CSS': 20,
-            'TypeScript': 10
+            'PHP': 30,
+            'HTML': 20,
+            'CSS': 10
         },
         primaryLanguage: 'JavaScript'
     }
