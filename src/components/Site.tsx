@@ -341,6 +341,9 @@ export function Site() {
           <a className="btn btn-dark" href="mailto:basirulakhlak@gmail.com">
             Contact Me <ArrowIcon />
           </a>
+          <a className="cta-mail" href="mailto:basirulakhlak@gmail.com">
+            basirulakhlak@gmail.com
+          </a>
           <div className="footer-row">
             <a className="chip chip-dark" href="#top">
               <img src="/images/portrait.png?v=9" alt="" loading="lazy" decoding="async" />
@@ -378,35 +381,37 @@ export function Site() {
             {sendState === "sent" ? (
               <div className="modal-sent">
                 <p><strong>Message sent.</strong></p>
-                <p>Thanks for reaching out — I’ll get back to you within a day.</p>
+                <p>Thanks for reaching out. I will get back to you within a day.</p>
                 <button className="btn btn-dark" type="button" onClick={() => setContactOpen(false)}>
                   Close
                 </button>
               </div>
             ) : (
-              <form className="modal-form" onSubmit={submitContact}>
-                <input name="name" placeholder="Your name" autoComplete="name" required />
-                <input name="email" type="email" placeholder="Your email" autoComplete="email" required />
-                <textarea name="message" placeholder="What are we building?" rows={4} required />
-                <button className="btn btn-dark" type="submit" disabled={sendState === "sending"}>
-                  {sendState === "sending" ? "Sending…" : (
-                    <>
-                      Send Message <ArrowIcon />
-                    </>
+              <>
+                <form className="modal-form" onSubmit={submitContact}>
+                  <input name="name" placeholder="Your name" autoComplete="name" required />
+                  <input name="email" type="email" placeholder="Your email" autoComplete="email" required />
+                  <textarea name="message" placeholder="What are we building?" rows={4} required />
+                  <button className="btn btn-dark" type="submit" disabled={sendState === "sending"}>
+                    {sendState === "sending" ? "Sending…" : (
+                      <>
+                        Send Message <ArrowIcon />
+                      </>
+                    )}
+                  </button>
+                  {sendState === "error" && (
+                    <p className="form-error" role="alert">
+                      Couldn’t send right now. Please use the mail button below.
+                    </p>
                   )}
-                </button>
-                {sendState === "error" && (
-                  <p className="form-error" role="alert">
-                    Couldn’t send right now. Please email me directly at{" "}
-                    <a href="mailto:basirulakhlak@gmail.com">basirulakhlak@gmail.com</a>.
-                  </p>
-                )}
-              </form>
+                </form>
+                <div className="modal-or" aria-hidden="true">or</div>
+                <a className="btn btn-light" href="mailto:basirulakhlak@gmail.com">
+                  Mail directly · basirulakhlak@gmail.com
+                </a>
+              </>
             )}
             <div className="modal-meta">
-              <a className="modal-mail" href="mailto:basirulakhlak@gmail.com">
-                basirulakhlak@gmail.com
-              </a>
               <div className="modal-socials">
                 {socials.map((social) => (
                   <a key={social.label} className="chip" href={social.href} target="_blank" rel="noreferrer">

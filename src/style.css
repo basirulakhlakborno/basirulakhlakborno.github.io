@@ -525,6 +525,19 @@ svg .fill { fill: currentColor; stroke: none; }
   font-size: 16px;
   line-height: 1.55;
 }
+.cta-mail {
+  display: block;
+  width: fit-content;
+  margin: 18px auto 0;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 15.5px;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.3);
+  padding-bottom: 2px;
+}
+.cta-mail:hover { border-color: #111; }
 .footer-row {
   display: flex;
   justify-content: center;
@@ -626,6 +639,35 @@ svg .fill { fill: currentColor; stroke: none; }
 .modal-sent p { margin: 0; color: #4e4e4e; font-size: 14.5px; line-height: 1.5; }
 .modal-sent p strong { color: var(--ink); font-size: 16px; }
 .modal-sent .btn { justify-content: center; margin-top: 14px; }
+.modal-or {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0 12px;
+  color: #9a9a9a;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.modal-or::before,
+.modal-or::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #ececec;
+}
+.btn-light {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  color: var(--ink);
+}
+.btn-light:hover { transform: translateY(-1px); border-color: #d4d4d4; }
+.modal .btn-light {
+  width: 100%;
+  justify-content: center;
+  font-size: 14px;
+}
 .modal-meta {
   margin-top: 20px;
   padding-top: 16px;
@@ -634,13 +676,6 @@ svg .fill { fill: currentColor; stroke: none; }
   flex-direction: column;
   gap: 12px;
 }
-.modal-mail {
-  color: var(--ink);
-  font-weight: 600;
-  font-size: 14.5px;
-  text-decoration: none;
-}
-.modal-mail:hover { opacity: 0.65; }
 .modal-socials { display: flex; flex-wrap: wrap; gap: 8px; }
 .modal-socials .chip {
   box-shadow: none;
